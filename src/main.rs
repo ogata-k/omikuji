@@ -100,8 +100,23 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
       println!("{}", omkj_data);
     }
     let e_sum: u8 = omkj_datas.iter().map(|data| data.eval).sum();
-    let e: u8 = e_sum / (6 * omkj_datas.len() as u8);
+    let e: u8 = e_sum / (omkj_datas.len() as u8);
 
-    println!("{} {}", e_sum, e);
+    println!("\nよって…");
+    std::thread::sleep(std::time::Duration::from_millis(3000));
+    //println!("{} {}", e_sum, e);
+    println!("{}", get_msg(e));
+}
 
+fn get_msg(n: u8) -> String{
+  match n {
+    0 => "大凶".to_string(),
+    1 => "凶".to_string(),
+    2 => "末吉".to_string(),
+    3 => "吉".to_string(),
+    4 => "小吉".to_string(),
+    5 => "中吉".to_string(),
+    6 => "大吉".to_string(),
+    _ => "???".to_string()
+  }
 }
