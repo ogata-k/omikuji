@@ -82,6 +82,7 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
           msg: msg
         };
         println!("{}",omkj_data);
+        omkj_datas.push(omkj_data);
         println!("取得に成功しました。");
     }
 
@@ -93,5 +94,14 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
            format!("{}さん", &yname.clone())
         };
 
-    println!("{}の運勢はhoge", &name);
+    println!("{}の運勢は…", &name);
+    for omkj_data in &omkj_datas{
+      std::thread::sleep(std::time::Duration::from_millis(100));
+      println!("{}", omkj_data);
+    }
+    let e_sum: u8 = omkj_datas.iter().map(|data| data.eval).sum();
+    let e: u8 = e_sum / (6 * omkj_datas.len() as u8);
+
+    println!("{} {}", e_sum, e);
+
 }
