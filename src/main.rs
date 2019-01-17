@@ -96,7 +96,7 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
 
     println!("{}の運勢は…", &name);
     for omkj_data in &omkj_datas{
-      std::thread::sleep(std::time::Duration::from_millis(100));
+      std::thread::sleep(std::time::Duration::from_millis(2000));
       println!("{}", omkj_data);
     }
     let e_sum: u8 = omkj_datas.iter().map(|data| data.eval).sum();
