@@ -4,6 +4,7 @@ extern crate rand;
 use std::io::Read;
 use std::path::Path;
 use std::fs::{create_dir, File};
+use std::fmt;
 use clap::{App, Arg};
 use rand::Rng;
 use rand::distributions::{Distribution, Uniform};
@@ -14,7 +15,11 @@ struct OmkjData{
   msg: String,
 }
 
-
+impl fmt::Display for OmkjData{ 
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "{}: {}", self.belong, self.msg)
+  }
+}
 
 fn main() {
     let s_vec: Vec<String> = std::env::args().collect();
@@ -56,6 +61,7 @@ fn main() {
         let mut file = File::open(data_folder.join(Path::new(&entry.file_name()))).expect("ファイルが開けませんでした。");
         let mut pre_contents = String::new();
         file.read_to_string(&mut pre_contents).expect("ファイルを読み込めませんでした。");
+        // ファイルがからの場合の処理を指定内
         let contents: Vec<&str> = pre_contents.split('\n').collect();
         //行選択用乱数
         let n: usize = Uniform::new(0, contents.len()).sample(&mut rng);
@@ -66,6 +72,16 @@ fn main() {
         let eval: u8 = (&content_split[0]).parse().unwrap();
         let msg: String = (&content_split[1 ..]).join(" ");
         println!("{}: {}", eval, msg);
+        let omkj_data = OmkjData{
+belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().to_owned().to_string().split('/').collect::<Vec<&str>>().last(){
+            (filename.split('.').collect::<Vec<&str>>())[0].to_string()
+        }
+        else {"".to_string()}
+        ,
+          eval: eval,
+          msg: msg
+        };
+        println!("{}",omkj_data);
         println!("取得に成功しました。");
     }
 
