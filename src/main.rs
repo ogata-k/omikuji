@@ -29,7 +29,7 @@ fn main() {
                     .parent()
                     .unwrap()
                     .join("data");
-    println!("{:?}内のデータを読み込んでいます。", data_folder);
+    // println!("{:?}内のデータを読み込んでいます。", data_folder);
     
     let about_msg: &str = &format!("このプログラムはおみくじを一度引くだけのプログラムです。\nおみくじの内容は拡張子がomkjとなるファイル(以下omkjファイル)に空行無しで各行を0~6(0が最悪)の数字と伝えたいメッセージを空白区切りで指定できます。omkjファイルのファイル名が表示させたい名前になります。(例えば金運.omkj)\nomkjファイルは{:?}に配置してください。", data_folder);
     let app = App::new("omikuji")
@@ -57,7 +57,7 @@ fn main() {
     for entry_result in data_folder.read_dir().unwrap() {
         let entry = entry_result.unwrap();
 
-        println!("{:?}というファイルを読み込んでいます…", entry.file_name());
+        // println!("{:?}というファイルを読み込んでいます…", entry.file_name());
         let mut file = File::open(data_folder.join(Path::new(&entry.file_name()))).expect("ファイルが開けませんでした。");
         let mut pre_contents = String::new();
         file.read_to_string(&mut pre_contents).expect("ファイルを読み込めませんでした。");
@@ -65,13 +65,13 @@ fn main() {
         let contents: Vec<&str> = pre_contents.split('\n').collect();
         //行選択用乱数
         let n: usize = Uniform::new(0, contents.len()).sample(&mut rng);
-        println!("{:?}", contents[n]);
+        // println!("{:?}", contents[n]);
 
         let content_split: Vec<&str> = contents[n].trim().split_whitespace().collect();
         // ここでomkj_datasにセット
         let eval: u8 = (&content_split[0]).parse().unwrap();
         let msg: String = (&content_split[1 ..]).join(" ");
-        println!("{}: {}", eval, msg);
+        // println!("{}: {}", eval, msg);
         let omkj_data = OmkjData{
 belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().to_owned().to_string().split('/').collect::<Vec<&str>>().last(){
             (filename.split('.').collect::<Vec<&str>>())[0].to_string()
@@ -81,9 +81,9 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
           eval: eval,
           msg: msg
         };
-        println!("{}",omkj_data);
+        // println!("{}",omkj_data);
         omkj_datas.push(omkj_data);
-        println!("取得に成功しました。");
+        // println!("取得に成功しました。");
     }
 
     let yname: &str = matches.value_of("yname").unwrap();
