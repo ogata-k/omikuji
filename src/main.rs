@@ -54,7 +54,7 @@ fn main() {
     let mut omkj_datas: Vec<OmkjData> = Vec::new();
     let mut rng = rand::thread_rng();
 
-    for entry_result in data_folder.read_dir().unwrap() {
+    for entry_result in data_folder.read_dir().expect("ディレクトリを読み込めませんでした。") {
         let entry = entry_result.unwrap();
 
         // println!("{:?}というファイルを読み込んでいます…", entry.file_name());
@@ -62,10 +62,12 @@ fn main() {
         let mut pre_contents = String::new();
         file.read_to_string(&mut pre_contents).expect("ファイルを読み込めませんでした。");
         // ファイルがからの場合の処理を指定内
-        let contents: Vec<&str> = pre_contents.split('\n').collect();
+        let contents: Vec<&str> = pre_contents.split('\n').filter(|&s| s != "").collect();
+
+        //println!("{:?}", contents);
+
         //行選択用乱数
         let n: usize = Uniform::new(0, contents.len()).sample(&mut rng);
-        // println!("{:?}", contents[n]);
 
         let content_split: Vec<&str> = contents[n].trim().split_whitespace().collect();
         // ここでomkj_datasにセット
@@ -81,9 +83,9 @@ belong: if let Some(filename) = Path::new(&entry.file_name()).to_string_lossy().
           eval: eval,
           msg: msg
         };
-        // println!("{}",omkj_data);
+        //println!("{}",omkj_data);
         omkj_datas.push(omkj_data);
-        // println!("取得に成功しました。");
+        //println!("取得に成功しました。");
     }
 
     let yname: &str = matches.value_of("yname").unwrap();
